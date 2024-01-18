@@ -13,15 +13,15 @@ enum Language {
 	english = 'eng',
 }
 const user1 = {
-	name: '김아무개',
+	name: '홍길동',
 	role: Role.ADMIN,
 	language: Language.korean,
 };
 
 const user2 = {
-	name: '박아무개',
+	name: 'James',
 	role: Role.USER,
-	language: Language.korean,
+	language: Language.english,
 };
 
 const user3 = {
