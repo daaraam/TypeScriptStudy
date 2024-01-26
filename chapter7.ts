@@ -18,3 +18,19 @@ function func3(): never {
 	throw new Error();
 	// 시작되자마자 에러로 종료되는 함수
 }
+
+function func4() {
+	return undefined;
+}
+function func5(): void {
+	return undefined;
+}
+
+type VoidFunc = () => void;
+
+const myFunc: VoidFunc = function () {
+	return 'hello'; // 성공
+};
+const myFunc2: VoidFunc = () => {
+	return 'hello'; // 성공
+};

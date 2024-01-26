@@ -1,7 +1,7 @@
 // 타입 좁히기
 // 조건문 등으로 넓은타입에서 좁은 타입으로 좁히는 방법
 // 1. typeof
-// 2. instanceof : A instance Date A의 값이 B냐고 물어보는 것
+// 2. A instanceof B : A의 값이 B냐고 물어보는 것
 
 type Person = {
 	name: string;
@@ -21,6 +21,8 @@ function func(value: number | string | Date | null | Person) {
 	}
 }
 
+// name:홍길동
+// age:undefined
 // value:number => toFixed();
 // value:string => toUpperCase();
 // value:Date => getTime();
