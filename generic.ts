@@ -20,9 +20,10 @@ let arr = func<[number, number, number]>([1, 2, 3]);
 
 // 제네릭 사례 1
 function swap<T, U>(a: T, b: U) {
-	return [b, a];
+	return [a, b];
 }
 const [a, b] = swap('1', 2);
+
 // a와 b의 타입이 다른 경우에는 제네릭 매개변수를 복수로 해야함.
 // T에 string, U에 number를 할당
 
@@ -33,7 +34,7 @@ function returnFirstValue<T>(data: [T, ...unknown[]]) {
 }
 
 let num1 = returnFirstValue([0, 1, 2]);
-let str1 = returnFirstValue([1, 'hello', 'my']);
+let str2 = returnFirstValue([1, 'hello', 'mynameis']);
 // number|string이 아니라 무조건 첫번째 타입을 추론하면 좋겠다. 튜플타입으로 정의해주기
 // 원래 data: T[]였는데 data:[T, ...unknown[]]로 바꾸기.
 

@@ -1,4 +1,4 @@
-// 1. 인덱스드 엑세스 타입 : 필요한 만큼만 추출해서 사용함.
+// 1. 인덱스드 엑세스 타입(indexed access types) : 필요한 만큼만 추출해서 사용함.
 
 // 1-1 객체
 // 객체의 특정 프로퍼티를 추출하는 방법(interface는 객체특화)
@@ -15,7 +15,8 @@ interface Post {
 // interface의 특정 프로퍼티만 사용할 수 있고, 기존 프로퍼티 타입이 변경되면 즉각 반영된다는 장점.
 // 여기서 'author'가 index인데, 변수나 값이 아니라 객체 type임.
 function printAuthorInfo(author: Post['author']) {
-	// function printAuthorInfo(author: Post['author']['name']) { 이런식으로 하면 author가 string타입이 됨
+	// function printAuthorInfo(author: Post['author']['name']) {
+	// 이런식으로 하면 author가 string타입이 됨
 
 	console.log(`${author.name}-${author.id}`);
 }
@@ -61,3 +62,67 @@ type Tup = [number, string, boolean, Date, number];
 type Tup0 = Tup[0];
 type Tup3 = Tup[3];
 type TupNum = Tup[number]; // 최적화 유니언타입. number|string|boolean|Date
+
+//
+// 2. keyof 연산자
+
+interface Person {
+	name: string;
+	age: number;
+}
+
+function getPropertyKey(person: Person, key: 'name' | 'age') {
+	return person[key];
+}
+
+const person: Person = {
+	name: '홍길동',
+	age: 54,
+	isJob: true,
+};
+
+getPropertyKey(person, 'name');
+
+//*typeof 연산자
+
+type Person1 = typeof person;
+
+interface Person {
+	name: string;
+	age: number;
+	isJob: boolean;
+}
+
+function getPropertyKey2(person: Person, key: keyof Person) {
+	return person[key];
+}
+
+getPropertyKey2(person, 'isJob'); // true;
+
+// 3. 맵드타입
+interface User {
+	id: number;
+	name: string;
+	age: number;
+}
+
+function fetchUser(): User {
+	return {
+		id: 1,
+		name: '홍길동',
+		age: 27,
+	};
+}
+
+interface User {
+	id: number;
+	name: string;
+	age: number;
+}
+
+type PartialUser = {
+	[key in keyof User]?: User[key];
+};
+
+// keyof 적용
+// 적용안할 경우 [key in 'id'|'name'|'age]

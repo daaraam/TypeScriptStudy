@@ -18,3 +18,20 @@ promise.catch(err => {
 	}
 });
 // 실패했을때의 타입은 정해줄 수 없어서 타입좁히기를 사용해야한다.
+
+type Post = {
+	id: number;
+	title: string;
+	content: string;
+};
+function fetchPost(): Promise<Post> {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve({
+				id: 1,
+				title: '게시글 제목',
+				content: '게시글 본문',
+			});
+		}, 3000);
+	});
+}
