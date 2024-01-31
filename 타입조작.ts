@@ -65,6 +65,7 @@ type TupNum = Tup[number]; // 최적화 유니언타입. number|string|boolean|D
 
 //
 // 2. keyof 연산자
+// 객체 형태의 타입에서 속성들만 뽑아 유니온 타입으로 만드는 연산자.
 
 interface Person {
 	name: string;
@@ -83,7 +84,39 @@ const person: Person = {
 
 getPropertyKey(person, 'name');
 
+type Type = {
+	name: string;
+	age: number;
+	married: boolean;
+};
+
+type Union = keyof Type;
+type Union2 = 'name' | 'age' | 'married';
+const union: Union = 'married';
+
 //*typeof 연산자
+// 객체 데이터를 객체 타입으로 변환해주는 연산자로 사용할 수 있다.
+
+const obj = {
+	red: 'apple',
+	yellow: 'banana',
+	green: 'cucumber',
+};
+
+type Color = keyof typeof obj;
+// typeof obj의 keyof. 'red'|'yellow'|'green'
+
+type Key = (typeof obj)[keyof typeof obj];
+// type Key = string ('apple'|'banana'|'cucumber')
+
+type Fruit = typeof obj;
+let obj2: Fruit = {
+	red: 'pepper',
+	yellow: 'orange',
+	green: 'leaves',
+};
+
+// obj라는 객체 데이터를 Fruit이라는 객체 타입으로 변환한 뒤 다른 객체에 구조 재사용함.
 
 type Person1 = typeof person;
 
@@ -99,7 +132,12 @@ function getPropertyKey2(person: Person, key: keyof Person) {
 
 getPropertyKey2(person, 'isJob'); // true;
 
+type Point = { x: 123; y: string };
+type P = 'number' | 'string';
+type PP = keyof Point;
+
 // 3. 맵드타입
+
 interface User {
 	id: number;
 	name: string;
@@ -114,15 +152,76 @@ function fetchUser(): User {
 	};
 }
 
-interface User {
-	id: number;
+type MappedType = {
+	[key in 'id' | 'age']?: User[key];
+};
+type PartialUser = {
+	id?: number;
+	name?: string;
+	age?: number;
+};
+
+// type PartialUser = {
+// 	[key in keyof User]?: User[key];
+// 	// key가 한번은 id, 한번은 name, 한번은 age가 된다는 뜻
+// };
+
+type ReadOnlyUser = {
+	readonly [key in keyof User]: User[key];
+	// 모든 프로퍼티가 읽기 전용 프로퍼티가 됨
+};
+
+// keyof 적용
+// 적용안할 경우 [key in 'id'|'name'|'age']
+
+interface Obj {
+	name: string;
+	email: string;
+}
+
+type ObjNumber = {
+	[P in keyof Obj]: number; // 맵드 타입
+};
+/*
+ type ObjNumber = {
+	 name: number;
+	 email: number;
+ }
+ */
+
+//  맵드타입 + 제네릭
+
+type Prop = 'prop1' | 'prop2';
+
+type Make<T> = {
+	[key in Prop]: T;
+};
+
+type T1 = Make<boolean>;
+
+const obj1: T1 = {
+	prop1: true,
+	prop2: false,
+};
+
+// 인터페이스 타입 바꾸기 string,number => boolean | undefined
+interface Person {
 	name: string;
 	age: number;
 }
 
-type PartialUser = {
-	[key in keyof User]?: User[key];
+type MakeBoolean<T> = {
+	[P in keyof T]?: boolean;
 };
 
-// keyof 적용
-// 적용안할 경우 [key in 'id'|'name'|'age]
+/**
+ {
+	name? : boolean | undefined;
+	age? : boolean| undefined;
+ }
+ */
+
+const pMap: MakeBoolean<Person> = {};
+pMap.name = true;
+pMap.age = false;
+pMap.age = undefined;
